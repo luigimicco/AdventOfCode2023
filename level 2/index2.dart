@@ -4,8 +4,7 @@ void main() {
   int total = 0;
 
   for (String row in rows) {
-    List<String> temp = row.split(":");
-    List<String> bags = temp[1].split(";");
+    List<String> bags = row.split(":")[1].split(";");
 
     Map<String, dynamic> max = {
       'blue': 0,

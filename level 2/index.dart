@@ -28,11 +28,6 @@ void main() {
       }
     }
 
-    /*
-   print(game);
-   print(max);
-   */
-
     if (max['blue'] <= maxBlue &&
         max['red'] <= maxRed &&
         max['green'] <= maxGreen) {
