@@ -1,74 +1,140 @@
 void main() {
-  List<String> digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-
   List<String> rows = getRows();
   int total = 0;
 
   for (int j = 0; j < rows.length; j++) {
-    String tempNum = "";
-    bool flag = false;
     for (int i = 0; i < rows[j].length; i++) {
-      if (digits.contains(rows[j][i])) {
-        tempNum = tempNum + rows[j][i];
-        if (checkNeighbors(
+      if (rows[j][i] == "*") {
+        total += findGear(
             row: rows[j],
             pos: i,
             rowPrev: (j > 0) ? rows[j - 1] : "",
-            rowSucc: (j < rows.length - 1) ? rows[j + 1] : "")) flag = true;
-      } else {
-        if (flag && tempNum.isNotEmpty) {
-          total += int.parse(tempNum);
-        }
-        tempNum = "";
-        flag = false;
+            rowSucc: (j < rows.length - 1) ? rows[j + 1] : "");
       }
-    }
-
-    if (flag && tempNum.isNotEmpty) {
-      total += int.parse(tempNum);
-      tempNum = "";
-      flag = false;
     }
   }
 
   print(total);
 }
 
-bool checkNeighbors(
+int findGear(
     {required String row,
     required int pos,
     String rowPrev = "",
     String rowSucc = ""}) {
-  List<String> others = ['.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  List<String> digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+  List<int> factors = [];
+
+  if (pos > 0) {
+    String tempNum = "";
+    bool flag = true;
+    int i = pos - 1;
+    do {
+      if (digits.contains(row[i])) {
+        tempNum = row[i] + tempNum;
+      } else {
+        flag = false;
+      }
+      i--;
+    } while (i >= 0 && flag);
+    if (tempNum.isNotEmpty) factors.add(int.parse(tempNum));
+  }
+
+  if ((pos + 1) < row.length) {
+    String tempNum = "";
+    bool flag = true;
+    int i = pos + 1;
+    do {
+      if (digits.contains(row[i])) {
+        tempNum = tempNum + row[i];
+      } else {
+        flag = false;
+      }
+      i++;
+    } while (i < row.length && flag);
+    if (tempNum.isNotEmpty) factors.add(int.parse(tempNum));
+  }
 
   if (rowPrev.isNotEmpty) {
+    String tempNum = "";
+    String tempNumLeft = "";
+    String tempNumRight = "";
     if (pos > 0) {
-      if (!others.contains(rowPrev[pos - 1])) return true;
+      bool flag = true;
+      int i = pos - 1;
+      do {
+        if (digits.contains(rowPrev[i])) {
+          tempNumLeft = rowPrev[i] + tempNumLeft;
+        } else {
+          flag = false;
+        }
+        i--;
+      } while (i >= 0 && flag);
     }
-    if (!others.contains(rowPrev[pos])) return true;
     if ((pos + 1) < rowPrev.length) {
-      if (!others.contains(rowPrev[pos + 1])) return true;
+      bool flag = true;
+      int i = pos + 1;
+      do {
+        if (digits.contains(rowPrev[i])) {
+          tempNumRight = tempNumRight + rowPrev[i];
+        } else {
+          flag = false;
+        }
+        i++;
+      } while (i < rowPrev.length && flag);
     }
+
+    if (digits.contains(rowPrev[pos])) {
+      tempNum = tempNumLeft + rowPrev[pos] + tempNumRight;
+    } else {
+      if (tempNumLeft.isNotEmpty) factors.add(int.parse(tempNumLeft));
+      if (tempNumRight.isNotEmpty) factors.add(int.parse(tempNumRight));
+      tempNum = "";
+    }
+    if (tempNum.isNotEmpty) factors.add(int.parse(tempNum));
   }
 
   if (rowSucc.isNotEmpty) {
+    String tempNum = "";
+    String tempNumLeft = "";
+    String tempNumRight = "";
     if (pos > 0) {
-      if (!others.contains(rowSucc[pos - 1])) return true;
+      bool flag = true;
+      int i = pos - 1;
+      do {
+        if (digits.contains(rowSucc[i])) {
+          tempNumLeft = rowSucc[i] + tempNumLeft;
+        } else {
+          flag = false;
+        }
+        i--;
+      } while (i >= 0 && flag);
     }
-    if (!others.contains(rowSucc[pos])) return true;
     if ((pos + 1) < rowSucc.length) {
-      if (!others.contains(rowSucc[pos + 1])) return true;
+      bool flag = true;
+      int i = pos + 1;
+      do {
+        if (digits.contains(rowSucc[i])) {
+          tempNumRight = tempNumRight + rowSucc[i];
+        } else {
+          flag = false;
+        }
+        i++;
+      } while (i < rowSucc.length && flag);
     }
+
+    if (digits.contains(rowSucc[pos])) {
+      tempNum = tempNumLeft + rowSucc[pos] + tempNumRight;
+    } else {
+      if (tempNumLeft.isNotEmpty) factors.add(int.parse(tempNumLeft));
+      if (tempNumRight.isNotEmpty) factors.add(int.parse(tempNumRight));
+      tempNum = "";
+    }
+    if (tempNum.isNotEmpty) factors.add(int.parse(tempNum));
   }
 
-  if (pos > 0) {
-    if (!others.contains(row[pos - 1])) return true;
-  }
-  if ((pos + 1) < row.length) {
-    if (!others.contains(row[pos + 1])) return true;
-  }
-
-  return false;
+  return (factors.length == 2) ? factors[0] * factors[1] : 0;
 }
 
 List<String> getRows() {
