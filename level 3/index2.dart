@@ -86,16 +86,6 @@ List<String> getRowNumbers({required String row, required int pos}) {
   }
 
   return [tempNumLeft, tempNumRight];
-
-/*   if (digits.contains(row[pos])) {
-    tempNum = tempNumLeft + row[pos] + tempNumRight;
-  } else {
-    if (tempNumLeft.isNotEmpty) factors.add(int.parse(tempNumLeft));
-    if (tempNumRight.isNotEmpty) factors.add(int.parse(tempNumRight));
-    tempNum = "";
-  }
-  if (tempNum.isNotEmpty) factors.add(int.parse(tempNum));
- */
 }
 
 List<String> getRows() {
