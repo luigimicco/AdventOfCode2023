@@ -26,115 +26,76 @@ int findGear(
 
   List<int> factors = [];
 
+  List<String> temp = getRowNumbers(row: row, pos: pos);
+  if (temp[0].isNotEmpty) factors.add(int.parse(temp[0]));
+  if (temp[1].isNotEmpty) factors.add(int.parse(temp[1]));
+
+  if (rowPrev.isNotEmpty) {
+    List<String> temp = getRowNumbers(row: rowPrev, pos: pos);
+
+    if (digits.contains(rowPrev[pos])) {
+      factors.add(int.parse(temp[0] + rowPrev[pos] + temp[1]));
+    } else {
+      if (temp[0].isNotEmpty) factors.add(int.parse(temp[0]));
+      if (temp[1].isNotEmpty) factors.add(int.parse(temp[1]));
+    }
+  }
+
+  if (rowSucc.isNotEmpty) {
+    List<String> temp = getRowNumbers(row: rowSucc, pos: pos);
+
+    if (digits.contains(rowSucc[pos])) {
+      factors.add(int.parse(temp[0] + rowSucc[pos] + temp[1]));
+    } else {
+      if (temp[0].isNotEmpty) factors.add(int.parse(temp[0]));
+      if (temp[1].isNotEmpty) factors.add(int.parse(temp[1]));
+    }
+  }
+
+  return (factors.length == 2) ? factors[0] * factors[1] : 0;
+}
+
+List<String> getRowNumbers({required String row, required int pos}) {
+  List<String> digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+  String tempNumLeft = "";
+  String tempNumRight = "";
   if (pos > 0) {
-    String tempNum = "";
     bool flag = true;
     int i = pos - 1;
     do {
       if (digits.contains(row[i])) {
-        tempNum = row[i] + tempNum;
+        tempNumLeft = row[i] + tempNumLeft;
       } else {
         flag = false;
       }
       i--;
     } while (i >= 0 && flag);
-    if (tempNum.isNotEmpty) factors.add(int.parse(tempNum));
   }
-
   if ((pos + 1) < row.length) {
-    String tempNum = "";
     bool flag = true;
     int i = pos + 1;
     do {
       if (digits.contains(row[i])) {
-        tempNum = tempNum + row[i];
+        tempNumRight = tempNumRight + row[i];
       } else {
         flag = false;
       }
       i++;
     } while (i < row.length && flag);
-    if (tempNum.isNotEmpty) factors.add(int.parse(tempNum));
   }
 
-  if (rowPrev.isNotEmpty) {
-    String tempNum = "";
-    String tempNumLeft = "";
-    String tempNumRight = "";
-    if (pos > 0) {
-      bool flag = true;
-      int i = pos - 1;
-      do {
-        if (digits.contains(rowPrev[i])) {
-          tempNumLeft = rowPrev[i] + tempNumLeft;
-        } else {
-          flag = false;
-        }
-        i--;
-      } while (i >= 0 && flag);
-    }
-    if ((pos + 1) < rowPrev.length) {
-      bool flag = true;
-      int i = pos + 1;
-      do {
-        if (digits.contains(rowPrev[i])) {
-          tempNumRight = tempNumRight + rowPrev[i];
-        } else {
-          flag = false;
-        }
-        i++;
-      } while (i < rowPrev.length && flag);
-    }
+  return [tempNumLeft, tempNumRight];
 
-    if (digits.contains(rowPrev[pos])) {
-      tempNum = tempNumLeft + rowPrev[pos] + tempNumRight;
-    } else {
-      if (tempNumLeft.isNotEmpty) factors.add(int.parse(tempNumLeft));
-      if (tempNumRight.isNotEmpty) factors.add(int.parse(tempNumRight));
-      tempNum = "";
-    }
-    if (tempNum.isNotEmpty) factors.add(int.parse(tempNum));
+/*   if (digits.contains(row[pos])) {
+    tempNum = tempNumLeft + row[pos] + tempNumRight;
+  } else {
+    if (tempNumLeft.isNotEmpty) factors.add(int.parse(tempNumLeft));
+    if (tempNumRight.isNotEmpty) factors.add(int.parse(tempNumRight));
+    tempNum = "";
   }
-
-  if (rowSucc.isNotEmpty) {
-    String tempNum = "";
-    String tempNumLeft = "";
-    String tempNumRight = "";
-    if (pos > 0) {
-      bool flag = true;
-      int i = pos - 1;
-      do {
-        if (digits.contains(rowSucc[i])) {
-          tempNumLeft = rowSucc[i] + tempNumLeft;
-        } else {
-          flag = false;
-        }
-        i--;
-      } while (i >= 0 && flag);
-    }
-    if ((pos + 1) < rowSucc.length) {
-      bool flag = true;
-      int i = pos + 1;
-      do {
-        if (digits.contains(rowSucc[i])) {
-          tempNumRight = tempNumRight + rowSucc[i];
-        } else {
-          flag = false;
-        }
-        i++;
-      } while (i < rowSucc.length && flag);
-    }
-
-    if (digits.contains(rowSucc[pos])) {
-      tempNum = tempNumLeft + rowSucc[pos] + tempNumRight;
-    } else {
-      if (tempNumLeft.isNotEmpty) factors.add(int.parse(tempNumLeft));
-      if (tempNumRight.isNotEmpty) factors.add(int.parse(tempNumRight));
-      tempNum = "";
-    }
-    if (tempNum.isNotEmpty) factors.add(int.parse(tempNum));
-  }
-
-  return (factors.length == 2) ? factors[0] * factors[1] : 0;
+  if (tempNum.isNotEmpty) factors.add(int.parse(tempNum));
+ */
 }
 
 List<String> getRows() {
