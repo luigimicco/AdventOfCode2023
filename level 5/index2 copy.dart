@@ -32,8 +32,11 @@ void main() {
       i++;
       do {
         List<String> temp = rows[i].trim().split(" ");
-        map[m]
-            .add([int.parse(temp[1]), int.parse(temp[0]), int.parse(temp[2])]);
+        map[m].add([
+          int.parse(temp[1]),
+          int.parse(temp[0]),
+          int.parse(temp[1]) + int.parse(temp[2])
+        ]);
         i++;
         if (i >= rows.length) {
           flag = false;
@@ -44,9 +47,11 @@ void main() {
     }
   }
 
+  List<int> locations = [];
   int rangesLen = ranges.length;
 
   int min = -1;
+
   int mapLen = map.length;
   print(rangesLen);
   for (int i = 0; i < rangesLen; i = i + 2) {
@@ -58,18 +63,22 @@ void main() {
       for (var m = 0; m < mapLen; m++) {
         int len = map[m].length;
         for (var k = 0; k < len; k++) {
-          if (temp >= map[m][k][0] && temp < (map[m][k][0] + map[m][k][2])) {
+          if (temp >= map[m][k][0] && temp < map[m][k][2]) {
             temp = map[m][k][1] + (temp - map[m][k][0]);
             break;
           }
         }
       }
-      if (min == -1 || temp < min) {
-        min = temp;
-      }
+      if (min == -1 || temp < min) min = temp;
+//      locations.add(temp);
     }
-    print(i.toString() + " " + min.toString());
   }
 
+/*   int min = locations[0];
+  int locLen = locations.length;
+  for (int i = 1; i < locLen; i++) {
+    if (locations[i] < min) min = locations[i];
+  }
+ */
   print(min);
 }
